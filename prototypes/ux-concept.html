@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f6f1">
+  <title>Palavra — conceito de experiência</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f7f6f1;
+      --surface: #fffefa;
+      --ink: #202c2a;
+      --muted: #727b76;
+      --line: #e6e7de;
+      --green: #287563;
+      --green-soft: #dcece5;
+      --amber: #b77829;
+      --amber-soft: #f4e8d5;
+      --stone: #68716d;
+      --stone-soft: #e6e8e5;
+      --shadow: 0 18px 55px rgb(36 49 42 / 8%);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse at 82% 5%, rgb(221 234 225 / 55%), transparent 29rem),
+        var(--paper);
+    }
+
+    a, button { font: inherit; }
+    a { color: inherit; }
+    :focus-visible {
+      outline: 3px solid #bd7622;
+      outline-offset: 4px;
+      border-radius: 8px;
+    }
+
+    .page { width: min(1100px, calc(100% - 48px)); margin: 0 auto; }
+    .topbar {
+      height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgb(32 44 42 / 9%);
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      text-decoration: none;
+      font-weight: 850;
+      letter-spacing: -.055em;
+      font-size: 1.3rem;
+    }
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      color: white;
+      background: var(--green);
+      font-size: .95rem;
+      letter-spacing: 0;
+      box-shadow: 0 5px 12px rgb(40 117 99 / 22%);
+    }
+    .top-note {
+      color: var(--muted);
+      font-size: .83rem;
+      font-weight: 600;
+      letter-spacing: .01em;
+    }
+
+    main { padding: 42px 0 52px; }
+    .intro {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 23px;
+    }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 9px;
+      color: var(--green);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #72a88d;
+      box-shadow: 0 0 0 4px rgb(114 168 141 / 17%);
+    }
+    h1 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      line-height: 1.04;
+      font-weight: 500;
+      letter-spacing: -.045em;
+    }
+    .intro-copy {
+      max-width: 310px;
+      margin: 0 0 3px;
+      color: var(--muted);
+      font-size: .9rem;
+      line-height: 1.55;
+    }
+
+    .mode-nav {
+      display: inline-flex;
+      padding: 4px;
+      margin-bottom: 20px;
+      border: 1px solid #e8e9e2;
+      border-radius: 13px;
+      background: rgb(255 254 250 / 82%);
+      box-shadow: 0 3px 12px rgb(36 49 42 / 3%);
+    }
+    .mode-nav a {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 17px;
+      border-radius: 9px;
+      color: #69736e;
+      text-decoration: none;
+      font-size: .85rem;
+      font-weight: 700;
+    }
+    .mode-nav a[aria-current="page"] {
+      color: var(--ink);
+      background: #e9f1eb;
+      box-shadow: inset 0 0 0 1px #dce9df;
+    }
+    .mode-icon { font-size: 1rem; }
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 292px;
+      align-items: start;
+      gap: 20px;
+    }
+    .game-card, .side-card {
+      border: 1px solid rgb(46 63 55 / 8%);
+      border-radius: 20px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+    .game-card { padding: 24px 30px 25px; }
+    .game-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding-bottom: 17px;
+      border-bottom: 1px solid #eff0ea;
+    }
+    .date-line {
+      margin: 0 0 4px;
+      color: var(--muted);
+      font-size: .77rem;
+      font-weight: 650;
+      letter-spacing: .025em;
+    }
+    .game-title { margin: 0; font-size: 1.02rem; font-weight: 760; letter-spacing: -.02em; }
+    .attempt-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 11px;
+      border: 1px solid #e9ebe4;
+      border-radius: 99px;
+      color: #56615b;
+      background: #fafaf7;
+      font-size: .75rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .attempt-pill strong { color: var(--green); font-size: .9rem; }
+    .instructions {
+      max-width: 480px;
+      margin: 15px auto 17px;
+      color: #606b65;
+      text-align: center;
+      font-size: .84rem;
+      line-height: 1.5;
+    }
+    .instructions strong { color: var(--ink); }
+    .board {
+      width: min(100%, 300px);
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 7px;
+      margin: 0 auto;
+    }
+    .board [role="row"] { display: contents; }
+    .tile {
+      position: relative;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border: 1.5px solid #dfe2dc;
+      border-radius: 9px;
+      background: #fff;
+      color: var(--ink);
+      font-size: clamp(1.08rem, 3.4vw, 1.42rem);
+      font-weight: 800;
+      letter-spacing: .025em;
+    }
+    .tile.filled { border-color: #aeb8b0; }
+    .tile.active { border: 2px solid var(--green); background: #fbfefb; }
+    .tile.state {
+      border-color: transparent;
+      color: #fff;
+      font-size: clamp(1rem, 3vw, 1.3rem);
+    }
+    .tile.correct { background: var(--green); }
+    .tile.present { background: var(--amber); }
+    .tile.absent { background: var(--stone); }
+    .tile .mark {
+      position: absolute;
+      right: 4px;
+      bottom: 2px;
+      font-size: .57rem;
+      line-height: 1;
+      font-weight: 900;
+      opacity: .96;
+    }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 16px;
+      margin: 14px 0 18px;
+      color: #646e68;
+      font-size: .7rem;
+      font-weight: 650;
+    }
+    .legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .legend-symbol {
+      width: 17px;
+      height: 17px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 5px;
+      color: white;
+      font-size: .65rem;
+      font-weight: 900;
+    }
+    .legend .is-correct { background: var(--green); }
+    .legend .is-present { background: var(--amber); }
+    .legend .is-absent { background: var(--stone); }
+
+    .keyboard {
+      width: min(100%, 440px);
+      display: grid;
+      gap: 6px;
+      margin: 0 auto;
+    }
+    .key-row { display: flex; justify-content: center; gap: 5px; }
+    .key {
+      min-width: 0;
+      height: 41px;
+      flex: 1 1 0;
+      position: relative;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 6px;
+      color: #33413a;
+      background: #e9ebe6;
+      font-size: .77rem;
+      font-weight: 760;
+      cursor: default;
+    }
+    .key.wide { flex: 1.55 1 0; font-size: .65rem; }
+    .key.correct { color: white; background: var(--green); }
+    .key.present { color: white; background: var(--amber); }
+    .key.absent { color: white; background: var(--stone); }
+    .key .key-mark {
+      position: absolute;
+      right: 4px;
+      top: 2px;
+      font-size: .48rem;
+      font-weight: 900;
+    }
+    .key-note {
+      margin: 9px 0 0;
+      color: #808981;
+      text-align: center;
+      font-size: .67rem;
+    }
+
+    .sidebar { display: grid; gap: 14px; }
+    .side-card { padding: 20px; box-shadow: 0 10px 30px rgb(36 49 42 / 5%); }
+    .side-heading {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 13px;
+      font-size: .9rem;
+      font-weight: 780;
+    }
+    .side-icon {
+      width: 29px;
+      height: 29px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      color: var(--green);
+      background: #eaf2ec;
+      font-size: .9rem;
+    }
+    .daily-label {
+      margin: 0 0 3px;
+      color: #7a837d;
+      font-size: .72rem;
+      font-weight: 650;
+    }
+    .countdown {
+      margin: 0;
+      font-size: 1.58rem;
+      font-weight: 780;
+      letter-spacing: .045em;
+      font-variant-numeric: tabular-nums;
+    }
+    .countdown-caption {
+      margin: 2px 0 0;
+      color: #78817b;
+      font-size: .67rem;
+      letter-spacing: .08em;
+      word-spacing: .45em;
+    }
+    .divider { height: 1px; margin: 16px 0 13px; background: #eff0eb; }
+    .privacy-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin: 0;
+      color: #747d77;
+      font-size: .71rem;
+      line-height: 1.5;
+    }
+    .privacy-note b { color: var(--green); font-size: .8rem; }
+    .practice-card { background: #f1f6f0; border-color: #e0ebe0; }
+    .practice-card .side-icon { background: #deecdf; }
+    .practice-card p {
+      margin: 0;
+      color: #657169;
+      font-size: .77rem;
+      line-height: 1.55;
+    }
+    .practice-link {
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 15px;
+      padding: 0 13px;
+      border: 1px solid #cee0d0;
+      border-radius: 10px;
+      color: #245f4e;
+      background: #fffefa;
+      text-decoration: none;
+      font-size: .78rem;
+      font-weight: 760;
+      transition: background-color .15s ease, transform .15s ease;
+    }
+    .practice-link:hover { background: #f8fcf7; transform: translateY(-1px); }
+    .practice-link span:last-child { font-size: 1rem; }
+    .stats-card { padding-bottom: 17px; }
+    .stats-intro { margin: -5px 0 13px; color: #7a837d; font-size: .7rem; }
+    .stats-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 0;
+      border-top: 1px solid #f0f1ec;
+      color: #68736c;
+      font-size: .74rem;
+    }
+    .stats-row strong { color: var(--ink); font-variant-numeric: tabular-nums; }
+    .concept-note {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 20px 0 0;
+      color: #8a918b;
+      font-size: .68rem;
+    }
+    .concept-note::before { content: ""; width: 20px; height: 1px; background: #b7beb7; }
+    footer {
+      padding: 16px 0 24px;
+      border-top: 1px solid rgb(32 44 42 / 8%);
+      color: #89918b;
+      font-size: .68rem;
+      text-align: center;
+    }
+
+    @media (max-width: 760px) {
+      .page { width: min(100% - 32px, 560px); }
+      .topbar { height: 68px; }
+      main { padding: 30px 0 38px; }
+      .intro { display: block; margin-bottom: 18px; }
+      .intro-copy { margin-top: 10px; max-width: 430px; }
+      .layout { grid-template-columns: 1fr; gap: 14px; }
+      .game-card { padding: 20px clamp(16px, 5vw, 30px) 22px; }
+      .sidebar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .stats-card { grid-column: 1 / -1; }
+      .side-card { padding: 17px; }
+      .concept-note { margin-top: 14px; }
+    }
+    @media (max-width: 430px) {
+      .page { width: calc(100% - 24px); }
+      .top-note { font-size: .72rem; }
+      .mode-nav { width: 100%; }
+      .mode-nav a { flex: 1; justify-content: center; padding: 0 8px; font-size: .79rem; }
+      .game-head { align-items: flex-start; }
+      .attempt-pill { padding: 7px 9px; font-size: .69rem; }
+      .board { gap: 6px; width: min(100%, 276px); }
+      .tile { border-radius: 7px; }
+      .keyboard { gap: 5px; }
+      .key-row { gap: 4px; }
+      .key { height: 39px; border-radius: 5px; font-size: .69rem; }
+      .key.wide { font-size: .58rem; }
+      .sidebar { grid-template-columns: 1fr; }
+      .stats-card { grid-column: auto; }
+      .side-card { padding: 18px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <a class="brand" href="#inicio" aria-label="Palavra, início">
+        <span class="brand-mark" aria-hidden="true">P</span>
+        <span>palavra</span>
+      </a>
+      <span class="top-note">Um minuto para você.</span>
+    </header>
+
+    <main id="inicio">
+      <section class="intro" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">Seu momento de pausa</p>
+          <h1 id="page-title">Uma palavra. Seis chances.</h1>
+        </div>
+        <p class="intro-copy">Descubra a palavra do dia com calma — ou pratique quantas vezes quiser.</p>
+      </section>
+
+      <nav class="mode-nav" aria-label="Escolha o modo de jogo">
+        <a href="#desafio" aria-current="page"><span class="mode-icon" aria-hidden="true">☀</span> Desafio diário</a>
+        <a href="#pratica"><span class="mode-icon" aria-hidden="true">↻</span> Prática</a>
+      </nav>
+
+      <div class="layout">
+        <section class="game-card" id="desafio" aria-labelledby="game-heading">
+          <header class="game-head">
+            <div>
+              <p class="date-line">QUARTA-FEIRA, 14 DE OUTUBRO</p>
+              <h2 class="game-title" id="game-heading">Desafio diário <span aria-hidden="true">·</span> #287</h2>
+            </div>
+            <div class="attempt-pill" aria-label="Tentativa 2 de 6"><strong>02</strong> de 06</div>
+          </header>
+
+          <p class="instructions" id="instructions">
+            Descubra a palavra de <strong>5 letras</strong> em até <strong>6 tentativas</strong>.
+            Acentos não mudam a comparação.
+          </p>
+
+          <div class="board" role="grid" aria-label="Tabuleiro do desafio diário, 6 linhas por 5 letras" aria-describedby="instructions">
+            <div role="row" aria-label="Tentativa 1: PATIO">
+              <div class="tile state absent" role="gridcell" aria-label="P, ausente">P<span class="mark" aria-hidden="true">×</span></div>
+              <div class="tile state present" role="gridcell" aria-label="A, presente em outra posição">A<span class="mark" aria-hidden="true">↗</span></div>
+              <div class="tile state present" role="gridcell" aria-label="T, presente em outra posição">T<span class="mark" aria-hidden="true">↗</span></div>
+              <div class="tile state absent" role="gridcell" aria-label="I, ausente">I<span class="mark" aria-hidden="true">×</span></div>
+              <div class="tile state absent" role="gridcell" aria-label="O, ausente">O<span class="mark" aria-hidden="true">×</span></div>
+            </div>
+            <div role="row" aria-label="Tentativa 2 em andamento: TER">
+              <div class="tile filled active" role="gridcell" aria-label="T, letra digitada">T</div>
+              <div class="tile filled" role="gridcell" aria-label="E, letra digitada">E</div>
+              <div class="tile filled" role="gridcell" aria-label="R, letra digitada">R</div>
+              <div class="tile" role="gridcell" aria-label="Quarta letra vazia"></div>
+              <div class="tile" role="gridcell" aria-label="Quinta letra vazia"></div>
+            </div>
+            <div role="row" aria-label="Tentativa 3, vazia">
+              <div class="tile" role="gridcell" aria-label="Letra 1, tentativa 3, vazia"></div><div class="tile" role="gridcell" aria-label="Letra 2, tentativa 3, vazia"></div><div class="tile" role="gridcell" aria-label="Letra 3, tentativa 3, vazia"></div><div class="tile" role="gridcell" aria-label="Letra 4, tentativa 3, vazia"></div><div class="tile" role="gridcell" aria-label="Letra 5, tentativa 3, vazia"></div>
+            </div>
+            <div role="row" aria-label="Tentativa 4, vazia">
+              <div class="tile" role="gridcell" aria-label="Letra 1, tentativa 4, vazia"></div><div class="tile" role="gridcell" aria-label="Letra 2, tentativa 4, vazia"></div><div class="tile" role="gridcell" aria-label="Letra 3, tentativa 4, vazia"></div><div class="tile" role="gridcell" aria-label="Letra 4, tentativa 4, vazia"></div><div class="tile" role="gridcell" aria-label="Letra 5, tentativa 4, vazia"></div>
+            </div>
+            <div role="row" aria-label="Tentativa 5, vazia">
+              <div class="tile" role="gridcell" aria-label="Letra 1, tentativa 5, vazia"></div><div class="tile" role="gridcell" aria-label="Letra 2, tentativa 5, vazia"></div><div class="tile" role="gridcell" aria-label="Letra 3, tentativa 5, vazia"></div><div class="tile" role="gridcell" aria-label="Letra 4, tentativa 5, vazia"></div><div class="tile" role="gridcell" aria-label="Letra 5, tentativa 5, vazia"></div>
+            </div>
+            <div role="row" aria-label="Tentativa 6, vazia">
+              <div class="tile" role="gridcell" aria-label="Letra 1, tentativa 6, vazia"></div><div class="tile" role="gridcell" aria-label="Letra 2, tentativa 6, vazia"></div><div class="tile" role="gridcell" aria-label="Letra 3, tentativa 6, vazia"></div><div class="tile" role="gridcell" aria-label="Letra 4, tentativa 6, vazia"></div><div class="tile" role="gridcell" aria-label="Letra 5, tentativa 6, vazia"></div>
+            </div>
+          </div>
+
+          <div class="legend" aria-label="Legenda dos sinais">
+            <span><i class="legend-symbol is-correct" aria-hidden="true">✓</i> posição certa</span>
+            <span><i class="legend-symbol is-present" aria-hidden="true">↗</i> outra posição</span>
+            <span><i class="legend-symbol is-absent" aria-hidden="true">×</i> não aparece</span>
+          </div>
+
+          <div class="keyboard" role="group" aria-label="Teclado virtual ilustrativo">
+            <div class="key-row">
+              <button class="key" type="button" aria-label="Letra Q">Q</button><button class="key" type="button" aria-label="Letra W">W</button><button class="key" type="button" aria-label="Letra E">E</button><button class="key" type="button" aria-label="Letra R">R</button><button class="key" type="button" aria-label="Letra T">T</button><button class="key" type="button" aria-label="Letra Y">Y</button><button class="key" type="button" aria-label="Letra U">U</button><button class="key" type="button" aria-label="Letra I, ausente">I<span class="key-mark" aria-hidden="true">×</span></button><button class="key" type="button" aria-label="Letra O, ausente">O<span class="key-mark" aria-hidden="true">×</span></button><button class="key" type="button" aria-label="Letra P, ausente">P<span class="key-mark" aria-hidden="true">×</span></button>
+            </div>
+            <div class="key-row">
+              <button class="key" type="button" aria-label="Letra A, presente em outra posição">A<span class="key-mark" aria-hidden="true">↗</span></button><button class="key" type="button" aria-label="Letra S">S</button><button class="key" type="button" aria-label="Letra D">D</button><button class="key" type="button" aria-label="Letra F">F</button><button class="key" type="button" aria-label="Letra G">G</button><button class="key" type="button" aria-label="Letra H">H</button><button class="key" type="button" aria-label="Letra J">J</button><button class="key" type="button" aria-label="Letra K">K</button><button class="key" type="button" aria-label="Letra L">L</button>
+            </div>
+            <div class="key-row">
+              <button class="key wide" type="button" aria-label="Apagar última letra">⌫</button><button class="key" type="button" aria-label="Letra Z">Z</button><button class="key" type="button" aria-label="Letra X">X</button><button class="key" type="button" aria-label="Letra C">C</button><button class="key" type="button" aria-label="Letra V">V</button><button class="key" type="button" aria-label="Letra B">B</button><button class="key" type="button" aria-label="Letra N">N</button><button class="key" type="button" aria-label="Letra M">M</button><button class="key wide" type="button" aria-label="Enviar palpite">Enviar</button>
+            </div>
+          </div>
+          <p class="key-note">Você também pode jogar pelo teclado do seu dispositivo.</p>
+        </section>
+
+        <aside class="sidebar" aria-label="Informações dos modos de jogo">
+          <section class="side-card" aria-labelledby="next-heading">
+            <h2 class="side-heading" id="next-heading"><span class="side-icon" aria-hidden="true">◷</span> Próximo desafio</h2>
+            <p class="daily-label">DISPONÍVEL EM</p>
+            <p class="countdown" aria-label="23 horas e 18 minutos">23:18:42</p>
+            <p class="countdown-caption" aria-hidden="true">HORAS &nbsp; MIN &nbsp; SEG</p>
+            <div class="divider"></div>
+            <p class="privacy-note"><b aria-hidden="true">◎</b><span>Seu resultado fica salvo neste navegador. Sem conta, sem pressão.</span></p>
+          </section>
+
+          <section class="side-card practice-card" id="pratica" aria-labelledby="practice-heading">
+            <h2 class="side-heading" id="practice-heading"><span class="side-icon" aria-hidden="true">↻</span> Quer continuar?</h2>
+            <p>Na prática, cada partida é uma nova palavra. Jogue no seu ritmo, sem limite.</p>
+            <a class="practice-link" href="#desafio" aria-label="Começar uma partida de prática">
+              <span>Jogar uma prática</span><span aria-hidden="true">→</span>
+            </a>
+          </section>
+
+          <section class="side-card stats-card" aria-labelledby="stats-heading">
+            <h2 class="side-heading" id="stats-heading"><span class="side-icon" aria-hidden="true">▥</span> Seu resumo</h2>
+            <p class="stats-intro">Estatísticas locais do desafio diário</p>
+            <div class="stats-row"><span>Partidas concluídas</span><strong>12</strong></div>
+            <div class="stats-row"><span>Vitórias</span><strong>9</strong></div>
+            <div class="stats-row"><span>Vitórias em 3 tentativas</span><strong>4</strong></div>
+          </section>
+        </aside>
+      </div>
+      <p class="concept-note">Conceito de experiência · interface demonstrativa</p>
+    </main>
+
+    <footer>Feito para uma pausa leve — seu progresso não é sincronizado e pode ser apagado ao limpar os dados do navegador.</footer>
+  </div>
+</body>
+</html>

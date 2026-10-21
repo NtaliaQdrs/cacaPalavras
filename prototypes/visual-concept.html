@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f2eddf">
+  <title>Entrelinhas — palavra do dia</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f2eddf;
+      --paper-light: #fbf8ef;
+      --paper-deep: #e7dfcc;
+      --ink: #202b27;
+      --ink-soft: #53615a;
+      --line: #d7cfbd;
+      --red: #c94d36;
+      --red-dark: #a63b29;
+      --green: #3d654e;
+      --green-light: #e6eee3;
+      --gold: #dfbd70;
+      --gold-light: #f1e5c7;
+      --quiet: #d7d7cb;
+      --serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+      --sans: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-width: 320px;
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse at 7% 7%, rgb(255 255 255 / 52%), transparent 31rem),
+        var(--paper);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button { font: inherit; }
+
+    a, button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--red);
+      outline-offset: 4px;
+    }
+
+    .page-shell {
+      width: min(1320px, 100%);
+      margin-inline: auto;
+      padding: 0 6.1%;
+    }
+
+    .masthead {
+      min-height: 84px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      width: 31px;
+      height: 31px;
+      display: grid;
+      place-items: center;
+      color: var(--paper-light);
+      background: var(--red);
+      font-family: var(--serif);
+      font-size: 21px;
+      font-style: italic;
+      line-height: 1;
+      transform: rotate(-7deg);
+    }
+
+    .brand-name {
+      font-family: var(--serif);
+      font-size: 22px;
+      letter-spacing: -.045em;
+    }
+
+    .brand-name span { color: var(--red); }
+
+    .edition {
+      color: var(--ink-soft);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .header-note {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--ink-soft);
+      font-size: 12px;
+    }
+
+    .header-note::before {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      content: "";
+    }
+
+    main { padding: 42px 0 52px; }
+
+    .intro {
+      display: grid;
+      grid-template-columns: minmax(0, 1.16fr) minmax(260px, .84fr);
+      align-items: end;
+      gap: 46px;
+      margin-bottom: 39px;
+    }
+
+    .eyebrow, .section-kicker {
+      margin: 0;
+      color: var(--red-dark);
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 680px;
+      margin: 15px 0 0;
+      font-family: var(--serif);
+      font-size: clamp(40px, 5.5vw, 70px);
+      font-weight: 400;
+      letter-spacing: -.065em;
+      line-height: .99;
+    }
+
+    h1 em {
+      color: var(--red);
+      font-weight: 400;
+    }
+
+    .intro-copy {
+      max-width: 360px;
+      padding: 0 0 5px 19px;
+      border-left: 1px solid var(--red);
+      color: var(--ink-soft);
+      font-family: var(--serif);
+      font-size: 17px;
+      line-height: 1.55;
+    }
+
+    .intro-copy p { margin: 0; }
+
+    .play-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(280px, .75fr);
+      align-items: start;
+      gap: clamp(28px, 5.3vw, 76px);
+    }
+
+    .game-column { min-width: 0; }
+
+    .mode-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 19px;
+    }
+
+    .mode-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      background: rgb(255 255 255 / 28%);
+    }
+
+    .mode {
+      min-height: 34px;
+      padding: 0 13px;
+      border: 0;
+      border-radius: 2px;
+      color: var(--ink-soft);
+      background: transparent;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .mode[aria-pressed="true"] {
+      color: var(--paper-light);
+      background: var(--ink);
+    }
+
+    .puzzle-number {
+      color: var(--ink-soft);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .08em;
+      white-space: nowrap;
+    }
+
+    .board-frame {
+      position: relative;
+      padding: clamp(18px, 3vw, 29px);
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(135deg, rgb(255 255 255 / 38%), transparent 55%),
+        var(--paper-light);
+      box-shadow: 0 12px 34px rgb(50 44 31 / 6%);
+    }
+
+    .board-frame::before {
+      position: absolute;
+      top: 0;
+      left: 29px;
+      width: 42px;
+      height: 3px;
+      background: var(--red);
+      content: "";
+    }
+
+    .board-label {
+      display: flex;
+      justify-content: space-between;
+      margin: 0 0 15px;
+      color: var(--ink-soft);
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .board {
+      width: min(100%, 322px);
+      margin-inline: auto;
+      display: grid;
+      gap: 7px;
+    }
+
+    .board-row {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 7px;
+    }
+
+    .tile {
+      position: relative;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border: 1px solid #cfc8b8;
+      color: var(--ink);
+      background: #f8f5eb;
+      font-family: var(--mono);
+      font-size: clamp(20px, 3vw, 28px);
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .tile[data-state="absent"] {
+      border-color: var(--quiet);
+      background: var(--quiet);
+    }
+
+    .tile[data-state="present"] {
+      border-color: var(--gold);
+      background: var(--gold-light);
+    }
+
+    .tile[data-state="correct"] {
+      border-color: var(--green);
+      color: white;
+      background: var(--green);
+    }
+
+    .tile[data-state]::after {
+      position: absolute;
+      right: 4px;
+      bottom: 3px;
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .tile[data-state="absent"]::after { content: "×"; }
+    .tile[data-state="present"]::after { content: "↗"; }
+    .tile[data-state="correct"]::after { content: "✓"; }
+
+    .tile.is-typed {
+      border: 1.5px solid var(--ink-soft);
+      background: #fffdf7;
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px 17px;
+      margin: 16px 0 0;
+      color: var(--ink-soft);
+      font-size: 10px;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-mark {
+      width: 17px;
+      height: 17px;
+      display: inline-grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .legend-mark.absent { background: var(--quiet); }
+    .legend-mark.present { background: var(--gold-light); }
+    .legend-mark.correct {
+      border-color: var(--green);
+      color: white;
+      background: var(--green);
+    }
+
+    .keyboard {
+      display: grid;
+      gap: 7px;
+      max-width: 492px;
+      margin: 20px auto 0;
+    }
+
+    .key-row {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .key {
+      min-width: 0;
+      height: 43px;
+      flex: 1;
+      padding: 0;
+      border: 1px solid #d4ccba;
+      border-radius: 2px;
+      color: var(--ink);
+      background: #e8e1d1;
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      transition: background-color .15s ease, transform .15s ease;
+    }
+
+    .key:hover { background: #ded6c3; }
+    .key:active { transform: translateY(1px); }
+    .key.wide {
+      flex: 1.55;
+      padding-inline: 7px;
+      font-family: var(--sans);
+      font-size: 10px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .game-footnote {
+      margin: 12px 0 0;
+      color: #72796f;
+      font-size: 10px;
+      text-align: center;
+    }
+
+    .side-column {
+      display: grid;
+      gap: 22px;
+      padding-top: 5px;
+    }
+
+    .daily-card {
+      position: relative;
+      padding: 22px 22px 20px;
+      overflow: hidden;
+      color: var(--paper-light);
+      background: var(--ink);
+    }
+
+    .daily-card::after {
+      position: absolute;
+      top: -38px;
+      right: -30px;
+      width: 132px;
+      height: 132px;
+      border: 1px solid rgb(242 237 223 / 13%);
+      border-radius: 50%;
+      box-shadow: 0 0 0 13px rgb(242 237 223 / 3%), 0 0 0 27px rgb(242 237 223 / 3%);
+      content: "";
+      pointer-events: none;
+    }
+
+    .daily-card .section-kicker { color: #e8ad92; }
+
+    .daily-card h2 {
+      max-width: 230px;
+      margin: 12px 0 6px;
+      font-family: var(--serif);
+      font-size: 28px;
+      font-weight: 400;
+      letter-spacing: -.04em;
+      line-height: 1.05;
+    }
+
+    .daily-date {
+      margin: 0;
+      color: #c5c8bd;
+      font-size: 11px;
+    }
+
+    .card-rule {
+      height: 1px;
+      margin: 17px 0 14px;
+      border: 0;
+      background: rgb(255 255 255 / 18%);
+    }
+
+    .daily-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: #d7d8ce;
+      font-size: 10px;
+    }
+
+    .daily-meta strong {
+      color: white;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .practice-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 17px 18px;
+      border: 1px solid var(--line);
+      color: inherit;
+      background: rgb(255 255 255 / 22%);
+      text-decoration: none;
+      transition: border-color .15s ease, background-color .15s ease;
+    }
+
+    .practice-link:hover {
+      border-color: var(--ink-soft);
+      background: rgb(255 255 255 / 45%);
+    }
+
+    .practice-copy { display: grid; gap: 4px; }
+
+    .practice-copy strong {
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 400;
+    }
+
+    .practice-copy span {
+      color: var(--ink-soft);
+      font-size: 10px;
+      line-height: 1.4;
+    }
+
+    .arrow {
+      color: var(--red);
+      font-size: 20px;
+    }
+
+    .how-to, .stats {
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .how-to h2, .stats h2 {
+      margin: 0 0 11px;
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: -.02em;
+    }
+
+    .how-to p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .how-to strong {
+      color: var(--ink);
+      font-weight: 650;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .stat {
+      padding: 10px 9px 9px;
+      border-left: 1px solid var(--red);
+      background: rgb(255 255 255 / 29%);
+    }
+
+    .stat strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: 23px;
+      font-weight: 400;
+      letter-spacing: -.04em;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 2px;
+      color: var(--ink-soft);
+      font-size: 9px;
+      line-height: 1.3;
+    }
+
+    .stats-note {
+      margin: 9px 0 0;
+      color: #72796f;
+      font-size: 9px;
+    }
+
+    .colophon {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 0 22px;
+      border-top: 1px solid var(--line);
+      color: #74796f;
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .06em;
+    }
+
+    @media (min-width: 1000px) {
+      .play-layout { grid-template-columns: minmax(0, 1.4fr) minmax(285px, .68fr); }
+      .board-frame { padding: 25px 32px 21px; }
+      .board { width: min(100%, 338px); }
+      .side-column { gap: 19px; }
+    }
+
+    @media (max-width: 760px) {
+      .page-shell { padding-inline: 5%; }
+      .masthead { min-height: 70px; }
+      .header-note { font-size: 10px; }
+      .intro {
+        grid-template-columns: 1fr;
+        gap: 17px;
+        margin-bottom: 27px;
+      }
+      h1 { max-width: 580px; font-size: clamp(43px, 9vw, 62px); }
+      .intro-copy { max-width: 440px; font-size: 15px; }
+      .play-layout { grid-template-columns: 1fr; gap: 29px; }
+      .side-column {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start;
+        gap: 20px;
+      }
+      .daily-card { grid-column: 1 / -1; }
+      .daily-card h2 { max-width: 360px; }
+      .colophon { margin-top: 35px; }
+    }
+
+    @media (max-width: 460px) {
+      .page-shell { padding-inline: 19px; }
+      .edition { display: none; }
+      main { padding-top: 31px; }
+      .intro { gap: 14px; }
+      h1 { font-size: clamp(40px, 11vw, 52px); }
+      .mode-row { align-items: flex-start; }
+      .mode { padding-inline: 10px; }
+      .puzzle-number { padding-top: 11px; font-size: 9px; }
+      .board-frame { padding: 19px 14px 17px; }
+      .board { gap: 6px; }
+      .board-row { gap: 6px; }
+      .tile { font-size: 25px; }
+      .key-row { gap: 4px; }
+      .key { height: 40px; font-size: 11px; }
+      .key.wide { padding-inline: 4px; font-size: 9px; }
+      .side-column { grid-template-columns: 1fr; gap: 20px; }
+      .daily-card { grid-column: auto; }
+      .colophon { flex-direction: column; gap: 6px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="masthead">
+      <a class="brand" href="#inicio" aria-label="Entrelinhas, início">
+        <span class="brand-mark" aria-hidden="true">e</span>
+        <span class="brand-name">entre<span>linhas</span></span>
+      </a>
+      <span class="edition">pequeno jogo, grandes palavras</span>
+      <span class="header-note">uma pausa para pensar</span>
+    </header>
+
+    <main id="inicio">
+      <section class="intro" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">Quarta-feira, 14 de outubro · edição nº 287</p>
+          <h1 id="page-title">Uma palavra.<br>Seis chances de <em>encontrá-la.</em></h1>
+        </div>
+        <div class="intro-copy">
+          <p>Todo dia, uma palavra nova para virar de lado, olhar de perto e descobrir letra por letra.</p>
+        </div>
+      </section>
+
+      <div class="play-layout">
+        <section class="game-column" id="tabuleiro" aria-label="Partida do desafio diário">
+          <div class="mode-row">
+            <div class="mode-switch" role="group" aria-label="Modo de jogo">
+              <button class="mode" type="button" aria-pressed="true">Desafio diário</button>
+              <button class="mode" type="button" aria-pressed="false">Prática</button>
+            </div>
+            <span class="puzzle-number">PALAVRA 287 / 365</span>
+          </div>
+
+          <div class="board-frame">
+            <p class="board-label"><span>Suas tentativas</span><span>01 de 06</span></p>
+            <div class="board" role="group" aria-label="Tabuleiro de seis tentativas por cinco letras">
+              <div class="board-row" role="group" aria-label="Tentativa 1: V ausente, E presente em outra posição, N correto, T correto, O presente em outra posição">
+                <span class="tile" data-state="absent" aria-label="V, ausente">V</span>
+                <span class="tile" data-state="present" aria-label="E, presente em outra posição">E</span>
+                <span class="tile" data-state="correct" aria-label="N, posição correta">N</span>
+                <span class="tile" data-state="correct" aria-label="T, posição correta">T</span>
+                <span class="tile" data-state="present" aria-label="O, presente em outra posição">O</span>
+              </div>
+              <div class="board-row" role="group" aria-label="Tentativa 2 em andamento: duas letras de cinco">
+                <span class="tile is-typed" aria-label="M, ainda não avaliada">M</span>
+                <span class="tile is-typed" aria-label="A, ainda não avaliada">A</span>
+                <span class="tile" aria-label="Posição vazia"></span>
+                <span class="tile" aria-label="Posição vazia"></span>
+                <span class="tile" aria-label="Posição vazia"></span>
+              </div>
+              <div class="board-row" role="group" aria-label="Tentativa 3, vazia">
+                <span class="tile" aria-label="Posição vazia"></span><span class="tile" aria-label="Posição vazia"></span><span class="tile" aria-label="Posição vazia"></span><span class="tile" aria-label="Posição vazia"></span><span class="tile" aria-label="Posição vazia"></span>
+              </div>
+              <div class="board-row" role="group" aria-label="Tentativa 4, vazia">
+                <span class="tile" aria-label="Posição vazia"></span><span class="tile" aria-label="Posição vazia"></span><span class="tile" aria-label="Posição vazia"></span><span class="tile" aria-label="Posição vazia"></span><span class="tile" aria-label="Posição vazia"></span>
+              </div>
+              <div class="board-row" role="group" aria-label="Tentativa 5, vazia">
+                <span class="tile" aria-label="Posição vazia"></span><span class="tile" aria-label="Posição vazia"></span><span class="tile" aria-label="Posição vazia"></span><span class="tile" aria-label="Posição vazia"></span><span class="tile" aria-label="Posição vazia"></span>
+              </div>
+              <div class="board-row" role="group" aria-label="Tentativa 6, vazia">
+                <span class="tile" aria-label="Posição vazia"></span><span class="tile" aria-label="Posição vazia"></span><span class="tile" aria-label="Posição vazia"></span><span class="tile" aria-label="Posição vazia"></span><span class="tile" aria-label="Posição vazia"></span>
+              </div>
+            </div>
+            <div class="legend" aria-label="Legenda dos estados das letras">
+              <span class="legend-item"><span class="legend-mark absent" aria-hidden="true">×</span> não tem</span>
+              <span class="legend-item"><span class="legend-mark present" aria-hidden="true">↗</span> outra posição</span>
+              <span class="legend-item"><span class="legend-mark correct" aria-hidden="true">✓</span> posição certa</span>
+            </div>
+          </div>
+
+          <div class="keyboard" role="group" aria-label="Teclado virtual">
+            <div class="key-row">
+              <button class="key" type="button" aria-label="Letra Q">Q</button><button class="key" type="button" aria-label="Letra W">W</button><button class="key" type="button" aria-label="Letra E">E</button><button class="key" type="button" aria-label="Letra R">R</button><button class="key" type="button" aria-label="Letra T">T</button><button class="key" type="button" aria-label="Letra Y">Y</button><button class="key" type="button" aria-label="Letra U">U</button><button class="key" type="button" aria-label="Letra I">I</button><button class="key" type="button" aria-label="Letra O">O</button><button class="key" type="button" aria-label="Letra P">P</button>
+            </div>
+            <div class="key-row">
+              <button class="key" type="button" aria-label="Letra A">A</button><button class="key" type="button" aria-label="Letra S">S</button><button class="key" type="button" aria-label="Letra D">D</button><button class="key" type="button" aria-label="Letra F">F</button><button class="key" type="button" aria-label="Letra G">G</button><button class="key" type="button" aria-label="Letra H">H</button><button class="key" type="button" aria-label="Letra J">J</button><button class="key" type="button" aria-label="Letra K">K</button><button class="key" type="button" aria-label="Letra L">L</button>
+            </div>
+            <div class="key-row">
+              <button class="key wide" type="button" aria-label="Apagar última letra">apagar</button><button class="key" type="button" aria-label="Letra Z">Z</button><button class="key" type="button" aria-label="Letra X">X</button><button class="key" type="button" aria-label="Letra C">C</button><button class="key" type="button" aria-label="Letra V">V</button><button class="key" type="button" aria-label="Letra B">B</button><button class="key" type="button" aria-label="Letra N">N</button><button class="key" type="button" aria-label="Letra M">M</button><button class="key wide" type="button" aria-label="Enviar tentativa">enviar</button>
+            </div>
+          </div>
+          <p class="game-footnote">Também dá para jogar com o teclado do seu computador.</p>
+        </section>
+
+        <aside class="side-column" aria-label="Sobre o jogo">
+          <section class="daily-card" aria-labelledby="daily-title">
+            <p class="section-kicker">A palavra de hoje</p>
+            <h2 id="daily-title">Um novo enigma a cada manhã.</h2>
+            <p class="daily-date">14 de outubro · quarta-feira</p>
+            <hr class="card-rule">
+            <div class="daily-meta">
+              <span>Próxima edição</span>
+              <strong>amanhã, à meia-noite</strong>
+            </div>
+          </section>
+
+          <a class="practice-link" href="#tabuleiro" aria-label="Começar uma partida no modo prática">
+            <span class="practice-copy">
+              <strong>Mais uma rodada?</strong>
+              <span>Pratique sem limite, no seu ritmo.</span>
+            </span>
+            <span class="arrow" aria-hidden="true">↗</span>
+          </a>
+
+          <section class="how-to" aria-labelledby="how-title">
+            <p class="section-kicker">Como jogar</p>
+            <h2 id="how-title">Leia as entrelinhas.</h2>
+            <p>Descubra a palavra de <strong>cinco letras</strong> em até <strong>seis palpites</strong>. As marcas mostram se uma letra não aparece, está em outro lugar ou já encontrou sua posição. Acentos não mudam a resposta.</p>
+          </section>
+
+          <section class="stats" aria-labelledby="stats-title">
+            <p class="section-kicker">Seu caderno</p>
+            <h2 id="stats-title">Pequenas vitórias</h2>
+            <div class="stats-grid">
+              <div class="stat"><strong>18</strong><span>partidas</span></div>
+              <div class="stat"><strong>72%</strong><span>vitórias</span></div>
+              <div class="stat"><strong>4,2</strong><span>tentativas, em média</span></div>
+            </div>
+            <p class="stats-note">Estatísticas guardadas neste navegador.</p>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="colophon">
+      <span>ENTRELINHAS · UM JOGO DE PALAVRAS</span>
+      <span>feito para uma pausa, em português do Brasil</span>
+    </footer>
+  </div>
+</body>
+</html>

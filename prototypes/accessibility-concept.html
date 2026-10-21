@@ -1,0 +1,727 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f1e8">
+  <title>Palavra por palavra — conceito acessível</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f4f1e8;
+      --surface: #fffefa;
+      --ink: #142a35;
+      --muted: #425963;
+      --line: #9ca9a8;
+      --focus: #a33b00;
+      --correct: #163f49;
+      --present: #ffdf70;
+      --absent: #e2e6e3;
+      --accent: #a33b00;
+      --shadow: 0 8px 0 rgb(20 42 53 / 8%);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { background: var(--paper); }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    a { color: inherit; }
+
+    a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+      outline: 4px solid var(--focus);
+      outline-offset: 4px;
+      border-radius: 4px;
+    }
+
+    .skip-link {
+      position: absolute;
+      top: 0.5rem;
+      left: 0.5rem;
+      z-index: 2;
+      padding: 0.75rem 1rem;
+      transform: translateY(-160%);
+      background: var(--ink);
+      color: white;
+      font-weight: 700;
+    }
+
+    .skip-link:focus { transform: translateY(0); }
+
+    .site-header {
+      border-bottom: 2px solid var(--ink);
+      background: var(--surface);
+    }
+
+    .header-inner, main, .footer-inner {
+      width: min(100% - 2rem, 1120px);
+      margin-inline: auto;
+    }
+
+    .header-inner {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border: 2px solid var(--ink);
+      background: var(--present);
+      font-size: 1.2rem;
+      transform: rotate(-4deg);
+    }
+
+    .main-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .main-nav a {
+      display: inline-block;
+      padding: 0.55rem 0.85rem;
+      border: 2px solid transparent;
+      border-radius: 999px;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+      font-weight: 700;
+    }
+
+    .main-nav a[aria-current="page"] {
+      border-color: var(--ink);
+      background: var(--ink);
+      color: white;
+      text-decoration: none;
+    }
+
+    main { padding-block: 2.4rem 3rem; }
+
+    .intro {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .eyebrow {
+      margin: 0 0 0.4rem;
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      max-width: 15ch;
+      margin-bottom: 0.5rem;
+      font-size: clamp(2.1rem, 5vw, 3.5rem);
+      line-height: 1.02;
+      letter-spacing: -0.06em;
+    }
+
+    .intro-copy {
+      max-width: 52ch;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .round-stamp {
+      align-self: center;
+      min-width: 128px;
+      padding: 0.75rem;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      background: var(--present);
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 900;
+      line-height: 1.25;
+      transform: rotate(5deg);
+    }
+
+    .round-stamp strong {
+      display: block;
+      font-size: 1.2rem;
+    }
+
+    .mode-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      padding: 0.85rem 1rem;
+      border: 2px solid var(--ink);
+      background: var(--surface);
+    }
+
+    .mode-name { margin: 0; font-weight: 900; }
+    .mode-detail { margin: 0.1rem 0 0; color: var(--muted); font-size: 0.9rem; }
+
+    .mode-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+    }
+
+    .mode-actions a {
+      display: inline-flex;
+      min-height: 44px;
+      align-items: center;
+      justify-content: center;
+      padding: 0.55rem 0.9rem;
+      border: 2px solid var(--ink);
+      border-radius: 4px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .mode-actions a:first-child { background: var(--ink); color: white; }
+    .mode-actions a:last-child { background: var(--surface); }
+
+    .game-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(270px, 0.7fr);
+      align-items: start;
+      gap: 1rem;
+    }
+
+    .panel {
+      border: 2px solid var(--ink);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .board-panel { padding: 1.1rem clamp(0.75rem, 2vw, 1.4rem) 1.25rem; }
+
+    .board-heading {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.4rem 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .board-heading h2 { margin: 0; font-size: 1.25rem; }
+
+    .attempt-count {
+      padding: 0.25rem 0.6rem;
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .board-note { margin-bottom: 0.8rem; color: var(--muted); font-size: 0.9rem; }
+
+    .board-wrap { overflow-x: auto; }
+
+    .board {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0.35rem;
+      table-layout: fixed;
+    }
+
+    .board caption {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      clip-path: inset(50%);
+    }
+
+    .board th {
+      width: 2.25rem;
+      padding-right: 0.15rem;
+      color: var(--muted);
+      font-size: 0.7rem;
+      line-height: 1.1;
+      text-align: right;
+      vertical-align: middle;
+    }
+
+    .board td {
+      height: 70px;
+      padding: 0.25rem 0.1rem 0.2rem;
+      border: 2px solid var(--ink);
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .board td.correct {
+      background: var(--correct);
+      color: white;
+      border-width: 3px;
+    }
+
+    .board td.present {
+      background-color: var(--present);
+      background-image: repeating-linear-gradient(135deg, transparent 0 8px, rgb(20 42 53 / 9%) 8px 11px);
+      color: var(--ink);
+      border-style: dashed;
+    }
+
+    .board td.absent {
+      background-color: var(--absent);
+      background-image: radial-gradient(rgb(20 42 53 / 15%) 1px, transparent 1px);
+      background-size: 7px 7px;
+      color: var(--ink);
+      border-style: dotted;
+      border-width: 3px;
+    }
+
+    .letter {
+      display: block;
+      font-size: clamp(1.45rem, 3vw, 1.9rem);
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .tile-status {
+      display: block;
+      margin-top: 0.3rem;
+      font-size: clamp(0.52rem, 1vw, 0.65rem);
+      font-weight: 900;
+      line-height: 1.05;
+      text-transform: uppercase;
+    }
+
+    .empty-cell {
+      border-style: dashed !important;
+      border-color: #7b8b8c !important;
+      background: transparent !important;
+    }
+
+    .empty-cell .letter { color: #738385; }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem 1rem;
+      margin: 0.85rem 0 0;
+      padding: 0.75rem 0 0;
+      border-top: 1px solid var(--line);
+      list-style: none;
+    }
+
+    .legend li {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.81rem;
+      font-weight: 800;
+    }
+
+    .legend-mark {
+      display: grid;
+      width: 1.55rem;
+      height: 1.55rem;
+      place-items: center;
+      border: 2px solid var(--ink);
+      font-size: 0.8rem;
+      line-height: 1;
+    }
+
+    .legend-mark.correct { background: var(--correct); color: white; }
+    .legend-mark.present {
+      border-style: dashed;
+      background: repeating-linear-gradient(135deg, var(--present) 0 5px, #fff0b9 5px 8px);
+    }
+    .legend-mark.absent {
+      border-style: dotted;
+      background-color: var(--absent);
+      background-image: radial-gradient(rgb(20 42 53 / 22%) 1px, transparent 1px);
+      background-size: 5px 5px;
+    }
+
+    .side-column { display: grid; gap: 1rem; }
+
+    .status-panel { padding: 1rem; border-left: 8px solid var(--correct); }
+
+    .status-panel h2, .controls-panel h2, .stats-panel h2 {
+      margin-bottom: 0.6rem;
+      font-size: 1.1rem;
+    }
+
+    .status-pill {
+      display: inline-block;
+      margin-bottom: 0.55rem;
+      padding: 0.25rem 0.55rem;
+      border: 2px solid var(--ink);
+      background: var(--present);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .status-panel p:last-child { margin-bottom: 0; }
+
+    .announcement {
+      padding: 0.8rem;
+      border: 2px solid var(--ink);
+      background: #e9f0ed;
+    }
+
+    .announcement-label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-size: 0.75rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .announcement p { margin-bottom: 0; font-size: 0.92rem; }
+
+    .controls-panel, .stats-panel { padding: 1rem; }
+
+    .controls-panel > p {
+      margin-bottom: 0.6rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .key-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.35rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .key-list li {
+      display: grid;
+      min-height: 42px;
+      place-items: center;
+      border: 1px solid var(--ink);
+      border-bottom-width: 3px;
+      border-radius: 3px;
+      background: #f5f6f1;
+    }
+
+    kbd {
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 900;
+    }
+
+    .key-list .wide-key { grid-column: span 3; }
+    .key-list .wide-key kbd { font-size: 0.76rem; }
+
+    .sr-hint {
+      margin: 0.65rem 0 0 !important;
+      padding-left: 0.75rem;
+      border-left: 3px solid var(--accent);
+      color: var(--ink) !important;
+      font-size: 0.83rem !important;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      margin: 0;
+    }
+
+    .stats-grid div {
+      padding: 0.55rem 0.25rem;
+      border: 1px solid var(--line);
+      text-align: center;
+    }
+
+    .stats-grid dt { color: var(--muted); font-size: 0.72rem; }
+    .stats-grid dd { margin: 0; font-size: 1.25rem; font-weight: 900; }
+
+    .stats-footnote { margin: 0.6rem 0 0; color: var(--muted); font-size: 0.78rem; }
+
+    .practice-panel {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding: 1.25rem;
+      border-left: 8px solid var(--accent);
+    }
+
+    .practice-panel h2 {
+      margin-bottom: 0.35rem;
+      font-size: 1.25rem;
+    }
+
+    .practice-panel p { margin-bottom: 0; }
+
+    .practice-note {
+      min-width: 200px;
+      padding: 0.75rem;
+      border: 2px dashed var(--ink);
+      background: var(--paper);
+      text-align: center;
+    }
+
+    .footer {
+      border-top: 2px solid var(--ink);
+      background: var(--surface);
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.5rem 1rem;
+      padding-block: 1rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .footer p { margin: 0; }
+
+    @media (max-width: 760px) {
+      .intro { grid-template-columns: 1fr; }
+      .round-stamp {
+        position: absolute;
+        top: 93px;
+        right: 1rem;
+        min-width: 94px;
+        padding: 0.55rem;
+        font-size: 0.72rem;
+      }
+      .round-stamp strong { font-size: 1rem; }
+      .game-layout { grid-template-columns: 1fr; }
+      .side-column { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .practice-panel { align-items: flex-start; flex-direction: column; }
+      .practice-note { min-width: 0; }
+    }
+
+    @media (max-width: 520px) {
+      .header-inner, main, .footer-inner { width: min(100% - 1rem, 1120px); }
+      .header-inner { align-items: flex-start; flex-direction: column; padding-block: 0.8rem; }
+      .main-nav { width: 100%; }
+      .main-nav a { padding: 0.45rem 0.7rem; font-size: 0.9rem; }
+      main { padding-top: 1.5rem; }
+      .intro { padding-right: 0; }
+      .intro h1 { max-width: 11ch; font-size: 2.35rem; }
+      .round-stamp { top: 156px; right: 0.75rem; }
+      .mode-bar { align-items: flex-start; flex-direction: column; }
+      .mode-actions { width: 100%; }
+      .mode-actions a { flex: 1; }
+      .board-panel { padding-inline: 0.45rem; }
+      .board { border-spacing: 0.22rem; }
+      .board th { width: 1.7rem; padding-right: 0; font-size: 0.62rem; }
+      .board td { height: 61px; padding: 0.15rem 0; }
+      .letter { font-size: clamp(1.2rem, 6vw, 1.6rem); }
+      .tile-status { font-size: clamp(0.45rem, 2vw, 0.58rem); }
+      .side-column { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Pular para o jogo</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#inicio" aria-label="Palavra por palavra, página inicial">
+        <span class="brand-mark" aria-hidden="true">P</span>
+        <span>palavra por palavra</span>
+      </a>
+      <nav class="main-nav" aria-label="Navegação principal">
+        <a href="#desafio" aria-current="page">Desafio de hoje</a>
+        <a href="#pratica">Praticar</a>
+        <a href="#como-jogar">Como jogar</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <section class="intro" id="inicio" aria-labelledby="titulo">
+      <div>
+        <p class="eyebrow">Um jogo de palavras, feito para todo mundo</p>
+        <h1 id="titulo">Cada pista conta. Do seu jeito.</h1>
+        <p class="intro-copy">Descubra a palavra em até seis tentativas. Letras, formas e palavras mostram as pistas — não precisa distinguir cores para jogar.</p>
+      </div>
+      <div class="round-stamp" aria-label="Partida concluída na tentativa 4 de 6">
+        <strong>4 de 6</strong>
+        tentativas
+      </div>
+    </section>
+
+    <section class="mode-bar" id="desafio" aria-label="Modo de jogo">
+      <div>
+        <p class="mode-name">Desafio diário <span aria-hidden="true">·</span> 14 de outubro</p>
+        <p class="mode-detail">A mesma palavra para todo mundo, hoje.</p>
+      </div>
+      <div class="mode-actions">
+        <a href="#tabuleiro" aria-current="location">Ver partida de hoje</a>
+        <a href="#pratica">Ver modo prática</a>
+      </div>
+    </section>
+
+    <div class="game-layout" id="tabuleiro">
+      <section class="panel board-panel" aria-labelledby="titulo-tabuleiro">
+        <div class="board-heading">
+          <h2 id="titulo-tabuleiro">Seu tabuleiro</h2>
+          <span class="attempt-count">Partida encerrada · 4 palpites</span>
+        </div>
+        <p class="board-note" id="instrucao-tabuleiro">Cada casa mostra a letra e, logo abaixo, o que ela significa.</p>
+
+        <div class="board-wrap">
+          <table class="board" aria-describedby="instrucao-tabuleiro">
+            <caption>Resultado das seis tentativas do desafio diário. A palavra foi descoberta na quarta tentativa.</caption>
+            <tbody>
+              <tr>
+                <th scope="row">1ª</th>
+                <td class="absent" aria-label="P, ausente da resposta"><span class="letter">P</span><span class="tile-status">× Ausente</span></td>
+                <td class="present" aria-label="O, presente em outra posição"><span class="letter">O</span><span class="tile-status">↔ Outra</span></td>
+                <td class="absent" aria-label="R, ausente da resposta"><span class="letter">R</span><span class="tile-status">× Ausente</span></td>
+                <td class="absent" aria-label="T, ausente da resposta"><span class="letter">T</span><span class="tile-status">× Ausente</span></td>
+                <td class="present" aria-label="A, presente em outra posição"><span class="letter">A</span><span class="tile-status">↔ Outra</span></td>
+              </tr>
+              <tr>
+                <th scope="row">2ª</th>
+                <td class="present" aria-label="M, presente em outra posição"><span class="letter">M</span><span class="tile-status">↔ Outra</span></td>
+                <td class="correct" aria-label="E, correta nesta posição"><span class="letter">E</span><span class="tile-status">✓ Certa</span></td>
+                <td class="present" aria-label="L, presente em outra posição"><span class="letter">L</span><span class="tile-status">↔ Outra</span></td>
+                <td class="correct" aria-label="A, correta nesta posição"><span class="letter">A</span><span class="tile-status">✓ Certa</span></td>
+                <td class="absent" aria-label="R, ausente da resposta"><span class="letter">R</span><span class="tile-status">× Ausente</span></td>
+              </tr>
+              <tr>
+                <th scope="row">3ª</th>
+                <td class="correct" aria-label="L, correta nesta posição"><span class="letter">L</span><span class="tile-status">✓ Certa</span></td>
+                <td class="correct" aria-label="I, correta nesta posição"><span class="letter">I</span><span class="tile-status">✓ Certa</span></td>
+                <td class="absent" aria-label="G, ausente da resposta"><span class="letter">G</span><span class="tile-status">× Ausente</span></td>
+                <td class="correct" aria-label="A, correta nesta posição"><span class="letter">A</span><span class="tile-status">✓ Certa</span></td>
+                <td class="absent" aria-label="R, ausente da resposta"><span class="letter">R</span><span class="tile-status">× Ausente</span></td>
+              </tr>
+              <tr>
+                <th scope="row">4ª</th>
+                <td class="correct" aria-label="L, correta nesta posição"><span class="letter">L</span><span class="tile-status">✓ Certa</span></td>
+                <td class="correct" aria-label="I, correta nesta posição"><span class="letter">I</span><span class="tile-status">✓ Certa</span></td>
+                <td class="correct" aria-label="M, correta nesta posição"><span class="letter">M</span><span class="tile-status">✓ Certa</span></td>
+                <td class="correct" aria-label="Ã, correta nesta posição"><span class="letter">Ã</span><span class="tile-status">✓ Certa</span></td>
+                <td class="correct" aria-label="O, correta nesta posição"><span class="letter">O</span><span class="tile-status">✓ Certa</span></td>
+              </tr>
+              <tr>
+                <th scope="row">5ª</th>
+                <td class="empty-cell" aria-label="Casa vazia, partida encerrada"><span class="letter" aria-hidden="true">·</span></td>
+                <td class="empty-cell" aria-label="Casa vazia, partida encerrada"><span class="letter" aria-hidden="true">·</span></td>
+                <td class="empty-cell" aria-label="Casa vazia, partida encerrada"><span class="letter" aria-hidden="true">·</span></td>
+                <td class="empty-cell" aria-label="Casa vazia, partida encerrada"><span class="letter" aria-hidden="true">·</span></td>
+                <td class="empty-cell" aria-label="Casa vazia, partida encerrada"><span class="letter" aria-hidden="true">·</span></td>
+              </tr>
+              <tr>
+                <th scope="row">6ª</th>
+                <td class="empty-cell" aria-label="Casa vazia, partida encerrada"><span class="letter" aria-hidden="true">·</span></td>
+                <td class="empty-cell" aria-label="Casa vazia, partida encerrada"><span class="letter" aria-hidden="true">·</span></td>
+                <td class="empty-cell" aria-label="Casa vazia, partida encerrada"><span class="letter" aria-hidden="true">·</span></td>
+                <td class="empty-cell" aria-label="Casa vazia, partida encerrada"><span class="letter" aria-hidden="true">·</span></td>
+                <td class="empty-cell" aria-label="Casa vazia, partida encerrada"><span class="letter" aria-hidden="true">·</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ul class="legend" aria-label="Significado das pistas">
+          <li><span class="legend-mark correct" aria-hidden="true">✓</span> Certa: letra e posição</li>
+          <li><span class="legend-mark present" aria-hidden="true">↔</span> Outra: letra em outra posição</li>
+          <li><span class="legend-mark absent" aria-hidden="true">×</span> Ausente: não aparece</li>
+        </ul>
+      </section>
+
+      <aside class="side-column" aria-label="Resultado e orientações">
+        <section class="panel status-panel" aria-labelledby="titulo-resultado">
+          <span class="status-pill">Você descobriu!</span>
+          <h2 id="titulo-resultado">A palavra era LIMÃO.</h2>
+          <p>Resposta correta em <strong>4 de 6 tentativas</strong>. Os acentos fazem parte da escrita, mas não atrapalham a comparação.</p>
+          <div class="announcement" role="status" aria-live="polite" aria-atomic="true">
+            <span class="announcement-label">O jogo avisaria</span>
+            <p>“Palpite 4: LIMÃO. Todas as cinco letras estão na posição correta. Você descobriu a palavra em quatro tentativas.”</p>
+          </div>
+        </section>
+
+        <section class="panel controls-panel" id="como-jogar" aria-labelledby="titulo-controles">
+          <h2 id="titulo-controles">Jogue no seu ritmo</h2>
+          <p>Use o teclado físico para preencher o palpite. O tabuleiro anuncia cada resultado por letra e posição.</p>
+          <ul class="key-list" aria-label="Prévia das teclas de jogo">
+            <li><kbd>A–Z</kbd></li>
+            <li><kbd>Backspace</kbd></li>
+            <li><kbd>Enter</kbd></li>
+            <li class="wide-key"><kbd>Digite letras · apague · envie o palpite</kbd></li>
+          </ul>
+          <p class="sr-hint">Com leitor de tela: navegue pelas tentativas na ordem; cada casa informa a letra e sua pista em palavras.</p>
+        </section>
+
+        <section class="panel stats-panel" aria-labelledby="titulo-estatisticas">
+          <h2 id="titulo-estatisticas">Seu desafio de hoje</h2>
+          <dl class="stats-grid">
+            <div><dt>Jogos</dt><dd>1</dd></div>
+            <div><dt>Vitórias</dt><dd>1</dd></div>
+            <div><dt>Tentativas</dt><dd>4</dd></div>
+          </dl>
+          <p class="stats-footnote">Progresso salvo neste navegador. A prática fica separada do desafio diário.</p>
+        </section>
+      </aside>
+    </div>
+
+    <section class="panel practice-panel" id="pratica" aria-labelledby="titulo-pratica">
+      <div>
+        <p class="eyebrow">Sem limite de partidas</p>
+        <h2 id="titulo-pratica">Quer mais uma? Pratique à vontade.</h2>
+        <p>Comece outra palavra quando quiser. Suas partidas de prática ficam separadas do desafio diário e não mudam seu resultado de hoje.</p>
+      </div>
+      <p class="practice-note"><strong>Uma partida de cada vez.</strong><br>5 letras · até 6 palpites · sem pressão</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>Uma palavra por dia. Sem pressa, sem pegadinha.</p>
+      <p>Conceito visual · acessibilidade no centro</p>
+    </div>
+  </footer>
+</body>
+</html>
