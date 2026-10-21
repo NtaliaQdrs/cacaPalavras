@@ -1,0 +1,8 @@
+{
+  "name": "palavra-por-palavra",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}
